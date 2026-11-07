@@ -1,0 +1,36 @@
+services:
+  # ---------------------------------------------------------------- Backend
+  - type: web
+    name: sidcu-backend
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_URL
+        sync: false          # se escribe en el panel de Render
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: "*"           # luego cámbialo por la URL del frontend
+      - key: DDL_AUTO
+        value: update
+      - key: SEED_ENABLED
+        value: "false"
+
+  # --------------------------------------------------------------- Frontend
+  - type: web
+    name: sidcu-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      # react-router: cualquier ruta debe devolver index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
