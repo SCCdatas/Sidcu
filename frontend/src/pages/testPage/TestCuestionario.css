@@ -1,0 +1,126 @@
+.cuestionario-main {
+  max-width: 760px;
+  margin: 1.5rem auto 3rem;
+  padding: 0 1rem;
+}
+
+.cuestionario {
+  padding: 2rem;
+  border-radius: 14px;
+  background: #fff;
+  color: #332342;
+  box-shadow: 0 2px 18px rgba(90, 70, 130, 0.12);
+}
+
+.volver-tests {
+  color: #5e4a7f;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cuestionario h1,
+.cuestionario h2 {
+  color: #4b2f6a;
+  text-align: center;
+}
+
+.cuestionario h1 {
+  margin-top: 1.5rem;
+}
+
+.nota-test,
+.instruccion-test {
+  line-height: 1.5;
+  text-align: center;
+}
+
+.nota-test {
+  padding: 0.8rem;
+  border-radius: 8px;
+  background: #f2eef6;
+  font-size: 0.92rem;
+}
+
+.progreso-test {
+  margin: 1.5rem 0 0.5rem;
+  color: #5e4a7f;
+  font-weight: 600;
+  text-align: center;
+}
+
+.cuestionario progress {
+  display: block;
+  width: 100%;
+  height: 0.7rem;
+  margin-bottom: 2rem;
+  accent-color: #532e7a;
+}
+
+.opciones-test {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1.5rem 0;
+}
+
+.opcion-test,
+.boton-secundario {
+  padding: 0.75rem 1rem;
+  border: 1px solid #7a5a9c;
+  border-radius: 8px;
+  background: #fff;
+  color: #3b2454;
+  font: inherit;
+  cursor: pointer;
+}
+
+.opcion-test:hover,
+.opcion-test:focus-visible,
+.boton-secundario:hover {
+  background: #f2eef6;
+}
+
+.boton-secundario {
+  display: block;
+  margin: 0.75rem auto 0;
+}
+
+.resultado-test {
+  line-height: 1.6;
+  text-align: center;
+}
+
+.resultado-test .test-btn {
+  margin-top: 0.5rem;
+}
+
+.test-btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    background-color: #7D35C7;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(19, 0, 46, 0.2);
+}
+
+.test-btn:hover {
+    background-color: #bd80ff;
+    color: #13002e;
+    transform: translateY(-3px);
+}
+
+@media (max-width: 600px) {
+  .cuestionario {
+    padding: 1.25rem;
+  }
+
+  .opciones-test {
+    grid-template-columns: 1fr;
+  }
+}

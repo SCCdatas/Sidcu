@@ -1,0 +1,137 @@
+
+/* ESTILOS GENERALES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.login-main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* TARJETA DEL REGISTRO */
+.login-container {
+    background: rgba(19, 0, 46, 0.75);
+    backdrop-filter: blur(12px);
+    padding: 45px 40px;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 30px rgba(160, 90, 255, 0.25);
+    width: 100%;
+    max-width: 420px;
+}
+
+/* TITULO */
+#tituloRegistro {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+#tituloRegistro h2 {
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px rgba(180, 120, 255, 0.8);
+}
+
+/* FORMULARIO */
+#formularioRegistro {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* ETIQUETAS */
+#formularioRegistro label {
+    color: #e6d9ff;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* CAMPOS */
+#formularioRegistro input {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* PLACEHOLDER */
+#formularioRegistro input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* EFECTO AL SELECCIONAR */
+#formularioRegistro input:focus {
+    border-color: #b58aff;
+    box-shadow: 0 0 12px rgba(181, 138, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* BOTON */
+#botonRegistro {
+    margin-top: 15px;
+    padding: 14px;
+    background: linear-gradient(135deg, #9b5cff, #6a35c8);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* EFECTO DEL BOTON */
+#botonRegistro:hover {
+    background: linear-gradient(135deg, #b58aff, #854fe0);
+    box-shadow: 0 0 18px rgba(155, 92, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* TEXTO DE LOGIN */
+#formularioRegistro p {
+    color: #d9c9f5;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 15px;
+}
+
+/* ENLACE */
+#formularioRegistro p a {
+    color: #c5a3ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+#formularioRegistro p a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* ADAPTACION A CELULARES */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 35px 25px;
+        border-radius: 20px;
+    }
+
+    #tituloRegistro h2 {
+        font-size: 27px;
+    }
+}

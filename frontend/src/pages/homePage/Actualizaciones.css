@@ -1,0 +1,195 @@
+
+/* ============================= */
+/* SECCIÓN ACTUALIZACIONES */
+/* ============================= */
+
+.actualizaciones {
+    padding: 60px 40px;
+    text-align: center;
+    color: white;
+}
+
+/* TÍTULO */
+
+.actualizacionestitulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.actualizaciones h2 {
+    font-size: 30px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.actualizaciones h2 span {
+    color: #bd80ff;
+}
+
+/* CONTENEDOR DE TARJETAS */
+
+.actualizacionesarrow {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 65px;
+}
+
+/* LISTA DE ACTUALIZACIONES */
+
+.actualizacionescontenedor {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* TARJETAS */
+
+.actualizacion {
+    background: linear-gradient(
+        145deg,
+        #ffffff,
+        #f4eaff
+    );
+    color: #29213A;
+    border: 1px solid rgba(189, 128, 255, 0.4);
+    border-radius: 18px;
+    width: 270px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(19, 0, 46, 0.25);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* IMÁGENES */
+
+.actualizacion img {
+    width: 100%;
+    height: 175px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* EFECTO DE IMAGEN */
+
+.actualizacion:hover img {
+    transform: scale(1.05);
+}
+
+/* TEXTO */
+
+.actualizacion p {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    padding: 18px 15px;
+    margin: 0;
+    color: #332047;
+}
+
+/* EFECTO DE TARJETA */
+
+.actualizacion:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(189, 128, 255, 0.35);
+    border-color: #bd80ff;
+}
+
+/* ============================= */
+/* FLECHAS */
+/* ============================= */
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 35px;
+    padding-bottom: 17px;
+    color: white;
+    background: rgba(189, 128, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.arrow-left {
+    left: 6%;
+}
+
+.arrow-right {
+    right: 6%;
+}
+
+.arrow:hover {
+    background: #bd80ff;
+    color: #13002e;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.divider {
+    width: 2px;
+    background: linear-gradient(
+        transparent,
+        #bd80ff,
+        transparent
+    );
+    height: 200px;
+    align-self: center;
+}
+
+@media (max-width: 768px) {
+
+    .actualizaciones {
+        padding: 40px 20px;
+    }
+
+    .actualizaciones h2 {
+        font-size: 24px;
+    }
+
+    .actualizacionesarrow {
+        padding: 10px 35px;
+    }
+
+    .actualizacionescontenedor {
+        gap: 20px;
+    }
+
+    .actualizacion {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 25px;
+    }
+
+    .arrow-left {
+        left: -5px;
+    }
+
+    .arrow-right {
+        right: -5px;
+    }
+
+    .divider {
+        display: none;
+    }
+}

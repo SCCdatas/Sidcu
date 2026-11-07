@@ -1,0 +1,180 @@
+.carreras-intro {
+    text-align: center;
+    padding: 2rem 1rem 1.5rem 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    margin: 20px;
+    border-radius: 10px;
+}
+
+.carreras-intro h1 {
+    font-size: 2.2rem;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 0.6em;
+}
+
+.carreras-intro p {
+    font-size: 1.16rem;
+    color: #d3d3d3;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-bottom: 0.5em;
+}
+
+.busqueda-carrera {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7em;
+    margin-top: 35px;
+}
+
+.carrera-busqueda-input {
+    padding: 0.7em 1em;
+    border-radius: 8px;
+    border: 1px solid #ccccda;
+    width: 270px;
+    font-size: 1em;
+}
+
+.areas-carreras {
+    text-align: center;
+    margin-bottom: 1.3em;
+}
+.areas-carreras h2 {
+    color: #ffffff;
+    margin: 0.5em 0 0.6em 0;
+    font-size: 1.38rem;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.area-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.9em;
+}
+.area-tabs button {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 18px;
+    padding: 0.5em 1.4em;
+    font-size: 1em;
+    cursor: pointer;    
+    font-weight: 500;
+}
+.area-tabs button:hover,
+.area-tabs button:focus {
+    background-color: #dfbaff;
+
+}
+
+
+.carreras-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+}
+
+.carrera-card {
+    background: #fff;
+    border-radius: 16px;
+    width: 240px;
+    max-width: 90vw;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.carrera-card:hover {
+    box-shadow: 0 3px 20px 3px #d3c4e6;
+    transform: translateY(-5px);
+}
+
+.carrera-card img {
+    width: 85px;
+    height: 85px;
+    margin-bottom: 0.8rem;
+    object-fit: cover;
+    border-radius: 50%;
+    background: #eee6f6;
+    border: 3px solid #c2a6e3;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.carrera-card h3 {
+    font-size: 1.09rem;
+    color: #532e7a;
+    font-weight: 600;
+    margin: 0.6em 0;
+}
+
+.carrera-card p {
+    font-size: 0.95rem;
+    color: #533e7a;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.carrera-card p span {
+    display: block;
+    color: #714ca5;
+    font-size: 0.96em;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.carrera-card .ver-detalle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    background-color: #7D35C7;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(19, 0, 46, 0.2);
+    margin-top: auto;
+}
+.carrera-card .ver-detalle:hover {
+    background-color: #bd80ff;
+    color: #13002e;
+    transform: translateY(-3px);
+}
+
+.carrera-card.ingenieria { border-left: 4px solid #a183e4; }
+.carrera-card.salud { border-left: 4px solid #e04f4f; }
+.carrera-card.economia { border-left: 4px solid #35bba6; }
+.carrera-card.sociales { border-left: 4px solid #ffa726; }
+.carrera-card.arte { border-left: 4px solid #ce59ca; }
+.carrera-card.educacion { border-left: 4px solid #38b0e3; }
+
+@media (max-width: 768px) {
+
+    .navbar {
+        flex-direction: column;
+    }
+
+    .main {
+        width: 90%;
+        margin: auto;
+    }
+
+    .cards {
+        flex-direction: column;
+    }
+
+}

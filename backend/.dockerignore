@@ -1,0 +1,30 @@
+# Artefactos de compilación
+target/
+build/
+*.class
+*.jar
+*.log
+
+# Control de versiones
+.git/
+.gitignore
+.gitattributes
+
+# Entorno y secretos (nunca deben ir dentro de la imagen)
+.env
+.env.*
+!.env.example
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+.sts4-cache/
+
+# Documentación (no se necesita para compilar)
+README.md
+HELP.md

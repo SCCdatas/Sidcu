@@ -1,0 +1,284 @@
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+#tituloPrincipal {
+    font-size: 42px;
+    font-weight: 800;
+    color: #fdfdfd;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 900px;
+    margin: 45px auto 25px;
+    letter-spacing: -1px;
+}
+
+#tituloPrincipal span {
+    color: #bd80ff;
+}
+
+
+#subtituloPrincipal {
+    font-size: 16px;
+    font-weight: 400;
+    color: #E4D9F1;
+    text-align: center;
+    line-height: 1.8;
+    max-width: 750px;
+    margin: 0 auto 35px;
+    padding: 0 20px;
+}
+
+button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.botones {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.botones button {
+    background-color: #7D35C7;
+    color: white;
+    box-shadow: 0 4px 12px rgba(19, 0, 46, 0.2);
+}
+
+.botones button:hover {
+    background-color: #bd80ff;
+    color: #13002e;
+    transform: translateY(-3px);
+}
+
+.buscador {
+    margin: 40px auto 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.buscador input {
+    width: 450px;
+    max-width: 65%;
+    padding: 14px 22px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    background-color: #ffffff;
+    color: #29213A;
+    font-size: 15px;
+    text-align: left;
+    outline: none;
+    box-shadow: 0 4px 15px rgba(19, 0, 46, 0.15);
+    transition: all 0.3s ease;
+}
+
+.buscador input::placeholder {
+    color: #999;
+}
+
+.buscador input:focus {
+    border-color: #bd80ff;
+    box-shadow: 0 0 0 4px rgba(189, 128, 255, 0.2);
+}
+
+.buscar {
+    padding: 14px 30px;
+    background-color: #7D35C7;
+    color: white;
+    box-shadow: 0 4px 12px rgba(19, 0, 46, 0.2);
+}
+
+.buscar:hover {
+    background-color: #bd80ff;
+    color: #13002e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(19, 0, 46, 0.25);
+}
+
+
+.registro {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+.iniciarsesion {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: white;
+    color: #7D35C7;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.iniciarsesion:hover {
+    background-color: #dfbaff;
+    color: #13002e;
+    transform: translateY(-2px);
+}
+
+.registrarse {
+    display: inline-block;
+    padding: 10px 22px;
+    background-color: #7D35C7;
+    color: white;
+    border: 2px solid #7D35C7;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.registrarse:hover {
+    background-color: #bd80ff;
+    color: #13002e;
+    border-color: #bd80ff;
+    transform: translateY(-2px);
+}
+
+.suscripcion {
+    text-align: center;
+    color: white;
+    padding: 50px 20px 70px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.suscripcion h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.suscripcion p {
+    max-width: 700px;
+    margin: 0 auto 25px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+
+.suscripcion-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.suscripcion-form input {
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    width: 300px;
+    max-width: 100%;
+    box-sizing: border-box;
+    color: #000;
+    text-align: center;
+}
+
+
+.suscribirse {
+    background-color: #7D35C7;
+    color: white;
+    border: 2px solid #bd80ff;
+    padding: 10px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.suscribirse:hover {
+    background-color: #bd80ff;
+    color: #13002e;
+    transform: translateY(-2px);
+}
+
+button:active,
+.iniciarsesion:active,
+.registrarse:active {
+    transform: scale(0.97);
+}
+
+
+@media (max-width: 768px) {
+
+    #tituloPrincipal {
+        font-size: 30px;
+        padding: 0 20px;
+    }
+
+    #subtituloPrincipal {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .navbar {
+        flex-direction: column;
+    }
+
+    .main {
+        width: 90%;
+        margin: auto;
+    }
+
+    .cards {
+        flex-direction: column;
+    }
+
+    .buscador {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .buscador input {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .buscar {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .registro {
+        gap: 10px;
+    }
+
+    .suscripcion-form {
+        flex-direction: column;
+    }
+
+    .suscripcion-form input {
+        width: 100%;
+    }
+
+    .suscribirse {
+        width: 100%;
+        max-width: 200px;
+    }
+}

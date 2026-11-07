@@ -1,0 +1,124 @@
+header {
+    background: white;
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 45px;
+    height: 95px;
+    box-sizing: border-box;
+}
+
+/* LOGOS */
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.logo img {
+    height: 65px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+#logo2 {
+    height: 65px;
+}
+
+/* ENLACES */
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.nav-links li:not(:last-child)::after {
+    display: none;
+}
+
+.nav-links a {
+    position: relative;
+    text-decoration: none;
+    color: #000000;
+    font-size: 14px;
+    padding: 8px 0;
+    transition: color 0.5s ease;
+}
+
+/* EFECTO HOVER */
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #a56af7;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.nav-links a:hover {
+    color: #a56af7;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* TABLET Y CELULAR */
+
+@media (max-width: 900px) {
+    .navbar {
+        height: auto;
+        flex-direction: column;
+        padding: 12px;
+        gap: 15px;
+    }
+
+    .logo img {
+        height: 55px;
+    }
+
+    #logo2 {
+        height: 55px;
+    }
+
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+    }
+}
