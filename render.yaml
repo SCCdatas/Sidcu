@@ -9,11 +9,11 @@ services:
     plan: free
     healthCheckPath: /actuator/health
     envVars:
-      - key: DB_URL
+      - key: jdbc:postgresql://ep-icy-base-be1eo1as-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require
         sync: false          # se escribe en el panel de Render
-      - key: DB_USERNAME
+      - key: neondb_owner
         sync: false
-      - key: DB_PASSWORD
+      - key: npg_9sYFDbgPI7ik
         sync: false
       - key: CORS_ALLOWED_ORIGINS
         value: "*"           # luego cámbialo por la URL del frontend
