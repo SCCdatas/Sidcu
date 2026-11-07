@@ -1,6 +1,5 @@
-
 import "./InformacionCarreras.css";
-import { carreras } from "./carrerasData";
+import { carreras } from "./CarrerasData";
 
 const InformacionCarrera = () => {
 
