@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/homePage/Home";
 import Nosotros from "../pages/nosotrosPage/Nosotros";
@@ -20,6 +21,10 @@ export const routerApp = [
         path: "/",
         element: <App />,
         children: [
+            {
+                index: true,
+                element: <Navigate to="/home" replace />
+            },
             {
                 path: "home",
                 element: <Home />
