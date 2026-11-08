@@ -15,6 +15,7 @@ import TestHabilidades from "../pages/testPage/TestHabilidades";
 import TestPersonalidad from "../pages/testPage/TestPersonalidad";
 import TestMotivaciones from "../pages/testPage/TestMotivaciones";
 import TestAcademico from "../pages/testPage/TestAcademico.jsx";
+import TestProyectoIntegrador from "../pages/testPage/TestProyectoIntegrador.jsx";
 
 export const routerApp = [
     {
@@ -84,6 +85,10 @@ export const routerApp = [
             {
                 path: "academico",
                 element: <TestAcademico />
+            },
+            {
+                path: "proyecto-integrador",
+                element: <TestProyectoIntegrador />
             }
         ]
     }

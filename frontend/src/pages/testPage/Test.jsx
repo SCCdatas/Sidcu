@@ -42,6 +42,14 @@ const tests = [
         ruta: "/academico",
         preguntas: "10 preguntas",
     },
+    {
+        titulo: "Proyecto Integrador CESDE",
+        descripcion:
+            "Pon a prueba tus conocimientos sobre frontend, API REST, bases de datos y análisis de información.",
+        imagen: "/img/ingsis.jpg",
+        ruta: "/proyecto-integrador",
+        preguntas: "15 preguntas",
+    },
 ];
 
 const Test = () => {
