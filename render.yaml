@@ -10,13 +10,13 @@ services:
     healthCheckPath: /actuator/health
     envVars:
       - key: DB_URL
-        value: jdbc:postgresql://ep-icy-base-be1eo1as-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require
+        sync: false
       - key: DB_USERNAME
-        value: neondb_owner
+        sync: false
       - key: DB_PASSWORD
-        value: npg_9sYFDbgPI7ik
+        sync: false
       - key: CORS_ALLOWED_ORIGINS
-        value: "*"           # luego cámbialo por la URL del frontend
+        value: "*"
       - key: DDL_AUTO
         value: update
       - key: SEED_ENABLED
@@ -30,7 +30,7 @@ services:
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     routes:
-      # react-router: cualquier ruta debe devolver index.html
+      # React Router: cualquier ruta debe devolver index.html
       - type: rewrite
         source: /*
         destination: /index.html

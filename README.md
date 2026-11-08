@@ -21,9 +21,9 @@ sidcu/
 **Environment variables:**
 
 ```
-DB_URL=jdbc:postgresql://ep-icy-base-be1eo1as-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require
-DB_USERNAME=neondb_owner
-DB_PASSWORD=npg_9sYFDbgPI7ik
+DB_URL=jdbc:postgresql://<host>:5432/<database>?sslmode=require
+DB_USERNAME=<database-user>
+DB_PASSWORD=<configure-in-Render>
 CORS_ALLOWED_ORIGINS=*
 DDL_AUTO=update
 SEED_ENABLED=false
@@ -40,7 +40,11 @@ SEED_ENABLED=false
 | Build Command | `npm install && npm run build` |
 | Publish Directory | `dist` |
 
-(Opcional) Variable `VITE_API_URL` = URL del backend.
+El catálogo de carreras y universidades consulta el backend (`/api/carreras` y
+`/api/universidades`). El frontend usa `https://sidcu-2.onrender.com` por defecto.
+Si el backend cambia de URL, configura `VITE_API_URL` en el Static Site de Render
+y vuelve a desplegarlo. El backend debe permitir el origen del frontend en
+`CORS_ALLOWED_ORIGINS`.
 
 ## Desarrollo local
 
