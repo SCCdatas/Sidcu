@@ -1,0 +1,744 @@
+DOCUMENTACION DEL PROYECTO SIDCU
+Simulador Integral de Decisiones de Carrera Universitaria
+Proyecto integrador desarrollado en CESDE
+
+======================================================================
+1. PRESENTACION Y OBJETIVOS
+======================================================================
+
+SIDCU es una aplicacion web para consultar carreras, habilidades y
+universidades, y para apoyar la exploracion de intereses vocacionales.
+El repositorio contiene un frontend web y un backend REST que persiste
+catalogos y relaciones en PostgreSQL.
+
+Objetivo general
+----------------
+Facilitar la exploracion y orientacion academica de estudiantes mediante
+un catalogo de carreras, habilidades y universidades, y ofrecer una API
+capaz de relacionar intereses academicos con la oferta universitaria.
+
+Objetivos especificos
+---------------------
+1. Publicar y consultar carreras, niveles academicos, areas y habilidades.
+2. Consultar universidades y las carreras que cada una ofrece.
+3. Mantener registros de estudiantes, perfiles e intereses en el backend.
+4. Recomendar universidades a partir de las carreras de interes de un
+   estudiante, priorizando instituciones de su ciudad.
+5. Presentar graficos descriptivos del catalogo academico consultando los
+   datos actuales de la API.
+6. Proporcionar paginas de exploracion, comparacion y autoevaluacion
+   vocacional en el navegador.
+
+El objetivo anterior resume el proposito que se desprende del codigo y
+la documentacion del backend; no constituye una especificacion formal de
+CESDE.
+
+======================================================================
+2. ARQUITECTURA Y FLUJO DE DATOS
+======================================================================
+
+Frontend:
+- React 19, React Router 7 y Vite 8.
+- Aplicacion de pagina unica (SPA) publicada como sitio estatico.
+- Ruta de API configurable por VITE_API_URL. Si no se configura, usa
+  https://sidcu-2.onrender.com.
+- Las paginas de carreras, detalle de carrera, universidades y analitica
+  consultan endpoints del backend.
+- Las paginas de comparacion y las evaluaciones vocacionales usan datos
+  o estado del navegador; no se deben interpretar como operaciones
+  guardadas en la base de datos.
+
+Backend:
+- Java 17 y Spring Boot 4.
+- API HTTP/JSON implementada con Spring MVC, servicios, repositorios
+  Spring Data JPA y entidades Hibernate.
+- PostgreSQL como almacenamiento.
+- Swagger UI, OpenAPI y Scalar para explorar la API; Actuator ofrece
+  comprobaciones de salud.
+
+Flujo de una consulta de catalogo:
+Navegador -> componente React -> frontend/src/services/api.js -> endpoint
+REST -> controlador -> servicio/reglas de negocio -> repositorio JPA ->
+PostgreSQL. La respuesta se transforma a DTO y se muestra en el frontend.
+
+Despliegue:
+- render.yaml define un servicio Docker para el backend y un sitio estatico
+  para el frontend.
+- El backend recibe DB_URL, DB_USERNAME y DB_PASSWORD como variables de
+  entorno. No se incluyen credenciales en este documento.
+- CORS se configura mediante CORS_ALLOWED_ORIGINS. La configuracion
+  actual del manifiesto usa "*" y conviene restringirla al dominio real
+  del frontend en una configuracion de produccion.
+- El sitio estatico reescribe las rutas del navegador a index.html para
+  que funcione React Router.
+
+======================================================================
+3. FUNCIONALIDADES Y LIMITES ACTUALES
+======================================================================
+
+Conectado a la API:
+- Listado/busqueda local de carreras a partir del catalogo recibido.
+- Detalle de una carrera del catalogo por identificador.
+- Listado de universidades.
+- Tab ANALITICA, que combina carreras, universidades, habilidades y
+  relaciones de oferta para construir indicadores, respuestas y graficos.
+
+Implementado en el backend:
+- CRUD de carreras, habilidades, universidades, estudiantes y perfiles.
+- Creacion, consulta y eliminacion de intereses de carrera e intereses
+  universitarios.
+- Creacion, consulta y eliminacion de relaciones universidad-carrera.
+- Recomendacion de universidades para un estudiante.
+- Validaciones y reglas de negocio documentadas en la seccion 5.
+
+No asumir como conectado o persistente:
+- El inicio de sesion valida una lista local de administradores y guarda
+  el usuario en localStorage; no usa autenticacion de la API.
+- La pantalla de registro es solo una interfaz, sin registro funcional.
+- Los cuestionarios calculan resultados en el navegador y guardan el
+  resultado en localStorage; no crean perfiles ni intereses en la base.
+- La pagina Comparador usa el catalogo estatico CarrerasData.js.
+- La analitica resume registros actuales del catalogo; no mide matriculas,
+  demanda de estudiantes ni tendencias historicas.
+- La interfaz no expone en este momento todo el CRUD de estudiantes,
+  perfiles e intereses disponible en la API.
+
+======================================================================
+4. RUTAS DEL FRONTEND
+======================================================================
+
+Las rutas se declaran en frontend/src/router/routerApp.jsx:
+- / redirige a /home.
+- /home: pagina inicial.
+- /nosotros: informacion del proyecto/equipo.
+- /colaboradores: universidades registradas.
+- /carreras: listado y busqueda de carreras del backend.
+- /informacion?id=ID: detalle de carrera consultado a la API.
+- /informacion?carrera=CODIGO: ficha estatica de CarrerasData.js.
+- /comparador: comparacion basada en el catalogo estatico.
+- /analitica: indicadores y graficos sobre catalogos de la API.
+- /test: indice de evaluaciones.
+- /intereses, /habilidades, /personalidad, /motivaciones y /academico:
+  cuestionarios vocacionales locales.
+- /login: inicio de sesion local.
+- /registro: formulario visual no conectado.
+- Cualquier otra ruta muestra la pagina de error.
+
+======================================================================
+5. API REST Y REGLAS DE NEGOCIO
+======================================================================
+
+Rutas principales:
+- /actuator/health: estado del servicio.
+- /swagger-ui.html, /v3/api-docs y /scalar: documentacion de la API.
+- /api/carreras: GET lista (filtros area/nivel), GET /{id}, POST, PUT
+  /{id}, DELETE /{id}.
+- /api/habilidades: GET lista, GET /{id}, POST, PUT /{id}, DELETE /{id}.
+- /api/universidades: GET lista (filtros ciudad/nombre), GET /{id}, POST,
+  PUT /{id}, DELETE /{id}.
+- /api/estudiantes: GET lista (filtros documento/ciudad), GET /{id},
+  POST, PUT /{id}, DELETE /{id}.
+- /api/estudiantes/{id}/universidades-recomendadas: recomendaciones.
+- /api/perfiles-estudiantes: GET lista (filtro estudianteId), GET /{id},
+  POST, PUT /{id}, DELETE /{id}.
+- /api/intereses: GET lista, POST, GET y DELETE
+  /estudiantes/{estudianteId}/carreras/{carreraId}.
+- /api/intereses-universidades: GET lista, POST, GET y DELETE
+  /estudiantes/{estudianteId}/universidades/{universidadId}.
+- /api/universidades-carreras: GET lista, POST, GET y DELETE
+  /universidades/{universidadId}/carreras/{carreraId}.
+
+Reglas principales implementadas por los servicios:
+- Un estudiante puede tener como maximo cinco carreras de interes y no
+  puede repetir la misma relacion.
+- Solo se registra interes en una universidad si ofrece al menos una
+  carrera que interese al estudiante.
+- Una universidad no puede repetir la misma carrera en su oferta.
+- Cada estudiante puede tener un unico perfil.
+- Documento de estudiante, nombre de carrera, nombre de universidad y
+  nombre de habilidad son unicos.
+- No se permite eliminar carreras, universidades o habilidades que
+  tengan relaciones que deban conservarse (oferta/intereses/asociaciones).
+- La recomendacion busca universidades que ofrecen alguna carrera de
+  interes y prioriza las ubicadas en la ciudad del estudiante.
+- Recursos inexistentes generan respuesta HTTP 404. Las reglas de negocio
+  incumplidas generan HTTP 409. Validaciones y errores inesperados se
+  convierten en respuestas de error centralizadas.
+
+La analitica del frontend consulta GET /api/carreras,
+/api/universidades, /api/habilidades y /api/universidades-carreras.
+Sus graficos describen el contenido de esos catalogos en el momento de
+consulta, no actividad historica.
+
+======================================================================
+6. FUNCIONES Y COMPONENTES DEL FRONTEND
+======================================================================
+
+Aplicacion y layout
+-------------------
+frontend/src/main.jsx
+- Punto de entrada. Monta React, RouterProvider y routerApp.
+
+frontend/src/App.jsx
+- App(): muestra Navbar, Outlet y Footer; oculta el layout en /login y
+  /registro.
+
+frontend/src/router/routerApp.jsx
+- routerApp: configura todas las rutas descritas en la seccion 4.
+
+frontend/src/services/api.js
+- getApiData(path): hace GET al backend, convierte problemas de red o
+  estados HTTP no exitosos en errores explicitos y devuelve JSON.
+- API_BASE_URL: toma VITE_API_URL o la URL publicada predeterminada.
+
+frontend/src/components/layout/navbar/Navbar.jsx
+- Navbar(): renderiza navegacion principal, incluido el enlace ANALITICA.
+  Su CSS asociado define su presentacion.
+
+frontend/src/components/layout/footer/Footer.jsx
+- Footer(): renderiza el pie de pagina comun.
+
+Paginas y funciones auxiliares
+------------------------------
+frontend/src/pages/analiticaPage/Analitica.jsx
+- consultarCatalogos(): solicita en paralelo los cuatro catalogos/API y
+  valida que las respuestas sean listas.
+- contarPor(elementos, obtenerEtiqueta): agrupa y ordena registros por
+  etiqueta.
+- TarjetaIndicador: muestra un indicador numerico y su descripcion.
+- GraficoBarras: muestra una lista de barras accesibles o un mensaje vacio.
+- Analitica(): administra carga/error/actualizacion, calcula totales y
+  distribuciones por area, nivel, universidad, habilidad y carrera.
+
+frontend/src/pages/carrerasPage/Carreras.jsx
+- Carreras(): consulta carreras, muestra carga/errores, filtra nombres
+  usando el parametro buscar de la URL y enlaza al detalle.
+
+frontend/src/pages/informacionCarrerasPage/InformacionCarreras.jsx
+- CarreraDelCatalogo({id}): consulta el detalle real por ID a la API.
+- InformacionCarrera(): selecciona el detalle de API cuando recibe id o
+  muestra la ficha estatica cuando recibe carrera.
+
+frontend/src/pages/informacionCarrerasPage/CarrerasData.js
+- carreras: objeto de fichas estaticas con informacion descriptiva,
+  imagenes y datos de referencia para codigos de carrera.
+
+frontend/src/pages/colaboradoresPage/Colaboradores.jsx
+- Colaboradores(): consulta y representa universidades registradas en API.
+
+frontend/src/pages/comparadorPage/Comparador.jsx
+- Comparador(): permite comparar carreras obtenidas del catalogo estatico;
+  no consulta ni guarda comparaciones en el backend.
+
+frontend/src/pages/homePage/Home.jsx
+- Home(): compone el contenido de inicio y los accesos principales.
+
+frontend/src/pages/homePage/Actualizaciones.jsx
+- actualizacionesData: contenido estatico de novedades.
+- Actualizaciones(): muestra esa lista de novedades.
+
+frontend/src/pages/nosotrosPage/Nosotros.jsx
+- Nosotros(): pagina informativa del proyecto.
+
+frontend/src/pages/errorPage/Error.jsx
+- Error(): pagina para rutas no encontradas.
+
+frontend/src/pages/loginPage/Login.jsx
+- Login(): valida credenciales contra el arreglo local admins, muestra
+  errores, guarda el nombre de usuario en localStorage y navega a /home.
+  No es autenticacion contra el backend.
+
+frontend/src/data/admins.js
+- admins: datos locales usados por Login; no representan una tabla ni
+  autenticacion segura del servidor.
+
+frontend/src/pages/registroPage/Registro.jsx
+- Registro(): muestra formulario visual; no envia ni persiste los datos.
+
+frontend/src/pages/testPage/Test.jsx
+- tests: configuracion estatica de los cuestionarios, textos e imagenes.
+- Test(): presenta enlaces a las evaluaciones vocacionales.
+
+frontend/src/pages/testPage/CuestionarioVocacional.jsx
+- opciones: escala de respuesta (Nada, Poco, Bastante, Mucho).
+- CuestionarioVocacional(): controla respuestas, progreso, validacion de
+  preguntas completas, suma puntajes por categoria y guarda resultados
+  en localStorage.
+- responder(indice, valor): actualiza una respuesta.
+- calcularResultados(): agrega puntajes por categoria, ordena y guarda
+  el resultado local.
+
+frontend/src/pages/testPage/TestIntereses.jsx
+- preguntas: preguntas y categorias para la evaluacion de intereses.
+- TestIntereses(): configura CuestionarioVocacional con ese contenido.
+
+frontend/src/pages/testPage/TestHabilidades.jsx
+- preguntas: preguntas y categorias para la evaluacion de habilidades.
+- TestHabilidades(): configura CuestionarioVocacional.
+
+frontend/src/pages/testPage/TestPersonalidad.jsx
+- preguntas: preguntas y categorias para la evaluacion de personalidad.
+- TestPersonalidad(): configura CuestionarioVocacional.
+
+frontend/src/pages/testPage/TestMotivaciones.jsx
+- preguntas: preguntas y categorias para la evaluacion de motivaciones.
+- TestMotivaciones(): configura CuestionarioVocacional.
+
+frontend/src/pages/testPage/TestAcademico.jsx
+- preguntas: preguntas y categorias para la evaluacion academica.
+- TestAcademico(): configura CuestionarioVocacional.
+
+======================================================================
+7. ARCHIVOS DEL BACKEND Y RESPONSABILIDAD DE SUS FUNCIONES
+======================================================================
+
+Arranque, configuracion y despliegue
+------------------------------------
+backend/src/main/java/com/cesde/sidcudb/SidcudbApplication.java
+- SidcudbApplication.main(): inicia Spring Boot.
+
+backend/src/main/java/com/cesde/sidcudb/config/CorsConfig.java
+- CorsConfig(...): recibe los origenes CORS configurados.
+- addCorsMappings(...): permite solicitudes CORS en los endpoints API.
+
+backend/src/main/java/com/cesde/sidcudb/config/OpenApiConfig.java
+- sidcuOpenAPI(): configura titulo y metadatos de OpenAPI.
+
+backend/src/main/java/com/cesde/sidcudb/config/DataSeederConfig.java
+- cargarDatosIniciales(...): crea datos de ejemplo cuando el seeder esta
+  habilitado y los catalogos principales estan vacios.
+- habilidad(nombre, descripcion), carrera(nombre, area, nivel, habilidades),
+  universidad(nombre, ciudad, tipo, direccion, codigoPostal) y
+  estudiante(documento, nombre, ciudad): construyen las entidades de
+  ejemplo.
+- oferta(repository, universidad, carreras): crea relaciones de oferta
+  academica entre una universidad y varias carreras.
+
+backend/src/main/resources/application.properties
+- Configura nombre de aplicacion, datasource PostgreSQL desde entorno,
+  puerto, Hibernate, seeder, CORS y rutas de Swagger/Scalar.
+
+backend/Dockerfile
+- Construye el backend en una etapa Maven y lo ejecuta en una imagen Java.
+
+backend/.dockerignore
+- Excluye del contexto Docker archivos locales, artefactos y secretos.
+
+backend/.env.example
+- Plantilla de nombres de variables requeridas; no debe contener valores
+  reales de credenciales.
+
+render.yaml
+- Define el servicio Docker del backend, sus variables de entorno y health
+  check, y el sitio estatico frontend con rewrite SPA.
+
+Controladores: entrada HTTP y conversion a respuestas
+-----------------------------------------------------
+Los controladores reciben peticiones, validan DTO de entrada, llaman a su
+servicio y definen los codigos de respuesta. Los metodos CRUD mencionados
+son las funciones list(), buscarPorId(), crear(), actualizar() y
+eliminar(), segun el recurso; las rutas exactas aparecen en la seccion 5.
+
+backend/src/main/java/com/cesde/sidcudb/controller/CarreraController.java
+- listar(): filtra/lista carreras; buscarPorId(): obtiene una carrera;
+  crear(), actualizar() y eliminar(): administran ese recurso.
+
+backend/src/main/java/com/cesde/sidcudb/controller/EstudianteController.java
+- listar(), buscarPorId(), crear(), actualizar() y eliminar(): CRUD de
+  estudiantes. recomendarUniversidades(): obtiene recomendaciones.
+
+backend/src/main/java/com/cesde/sidcudb/controller/HabilidadController.java
+- listar(), buscarPorId(), crear(), actualizar() y eliminar(): CRUD de
+  habilidades.
+
+backend/src/main/java/com/cesde/sidcudb/controller/UniversidadController.java
+- listar(), buscarPorId(), crear(), actualizar() y eliminar(): CRUD de
+  universidades.
+
+backend/src/main/java/com/cesde/sidcudb/controller/PerfilEstudianteController.java
+- listar(), buscarPorId(), crear(), actualizar() y eliminar(): CRUD de
+  perfiles de estudiantes.
+
+backend/src/main/java/com/cesde/sidcudb/controller/InteresController.java
+- listar(), buscarPorId(), crear() y eliminar(): administra intereses
+  entre estudiante y carrera.
+
+backend/src/main/java/com/cesde/sidcudb/controller/InteresUniversidadController.java
+- listar(), buscarPorId(), crear() y eliminar(): administra intereses
+  entre estudiante y universidad.
+
+backend/src/main/java/com/cesde/sidcudb/controller/UniversidadCarreraController.java
+- listar(), buscarPorId(), crear() y eliminar(): administra la relacion
+  entre universidad y carrera ofertada.
+
+Servicios: reglas y acceso coordinado a repositorios
+----------------------------------------------------
+En cada servicio, listar() consulta colecciones y filtros; buscarPorId()
+recupera un registro; crear()/actualizar() aplican reglas y mapeos;
+eliminar() valida relaciones antes de borrar. obtener() es un auxiliar
+privado de busqueda que genera el error de recurso no encontrado.
+
+backend/src/main/java/com/cesde/sidcudb/service/CarreraService.java
+- listar(area, nivel), buscarPorId(id), crear(dto), actualizar(id, dto),
+  eliminar(id): gestion de carreras.
+- obtener(id): busqueda obligatoria; aplicar(carrera, dto): asigna campos;
+  resolverHabilidades(ids): busca y verifica habilidades asociadas.
+
+backend/src/main/java/com/cesde/sidcudb/service/EstudianteService.java
+- listar(documento, ciudad), buscarPorId(id), crear(dto), actualizar(id,
+  dto), eliminar(id): gestion de estudiantes.
+- recomendarUniversidades(estudianteId): recomienda instituciones de
+  acuerdo con intereses y ciudad.
+- obtener(id): recupera el estudiante o informa que no existe.
+
+backend/src/main/java/com/cesde/sidcudb/service/HabilidadService.java
+- listar(), buscarPorId(id), crear(dto), actualizar(id, dto),
+  eliminar(id): gestion de habilidades; obtener(id): busqueda obligatoria.
+
+backend/src/main/java/com/cesde/sidcudb/service/UniversidadService.java
+- listar(ciudad, nombre), buscarPorId(id), crear(dto), actualizar(id,
+  dto), eliminar(id): gestion de universidades y sus validaciones.
+- obtener(id): busqueda obligatoria.
+
+backend/src/main/java/com/cesde/sidcudb/service/PerfilEstudianteService.java
+- listar(estudianteId), buscarPorId(id), crear(dto), actualizar(id, dto),
+  eliminar(id): gestion de perfiles y regla de un perfil por estudiante.
+- obtener(id): busqueda obligatoria.
+
+backend/src/main/java/com/cesde/sidcudb/service/InteresService.java
+- listar(estudianteId, carreraId), buscarPorId(estudianteId, carreraId),
+  crear(dto), eliminar(estudianteId, carreraId): administra intereses y
+  valida el limite de carreras por estudiante.
+- obtener(idCompuesto): recupera la relacion o genera error.
+
+backend/src/main/java/com/cesde/sidcudb/service/InteresUniversidadService.java
+- listar(estudianteId, universidadId),
+  buscarPorId(estudianteId, universidadId), crear(dto),
+  eliminar(estudianteId, universidadId): administra intereses en
+  universidades y verifica coherencia con las carreras de interes.
+- obtener(idCompuesto): recupera la relacion o genera error.
+
+backend/src/main/java/com/cesde/sidcudb/service/UniversidadCarreraService.java
+- listar(universidadId, carreraId),
+  buscarPorId(universidadId, carreraId), crear(dto),
+  eliminar(universidadId, carreraId): administra la oferta academica y
+  evita duplicados.
+- obtener(idCompuesto): recupera la relacion o genera error.
+
+Persistencia y mapeo
+--------------------
+Todos los repositorios extienden JpaRepository y heredan operaciones
+estandar de persistencia/consulta. No declaran consultas personalizadas.
+
+backend/src/main/java/com/cesde/sidcudb/repository/CarreraRepository.java
+- Acceso JPA a Carrera.
+backend/src/main/java/com/cesde/sidcudb/repository/EstudianteRepository.java
+- Acceso JPA a Estudiante.
+backend/src/main/java/com/cesde/sidcudb/repository/HabilidadRepository.java
+- Acceso JPA a Habilidad.
+backend/src/main/java/com/cesde/sidcudb/repository/InteresRepository.java
+- Acceso JPA a Interes mediante InteresId.
+backend/src/main/java/com/cesde/sidcudb/repository/InteresUniversidadRepository.java
+- Acceso JPA a InteresUniversidad mediante InteresUniversidadId.
+backend/src/main/java/com/cesde/sidcudb/repository/PerfilEstudianteRepository.java
+- Acceso JPA a PerfilEstudiante.
+backend/src/main/java/com/cesde/sidcudb/repository/UniversidadCarreraRepository.java
+- Acceso JPA a UniversidadCarrera mediante UniversidadCarreraId.
+backend/src/main/java/com/cesde/sidcudb/repository/UniversidadRepository.java
+- Acceso JPA a Universidad.
+
+Los mappers convierten DTO y entidades, evitando exponer directamente
+entidades internas en la API:
+- mapper/CarreraMapper.java: toResponse(carrera).
+- mapper/EstudianteMapper.java: toEntity(dto), aplicar(estudiante, dto),
+  toResponse(estudiante).
+- mapper/HabilidadMapper.java: toEntity(dto), aplicar(habilidad, dto),
+  toResponse(habilidad).
+- mapper/InteresMapper.java: toResponse(interes).
+- mapper/InteresUniversidadMapper.java: toResponse(relacion).
+- mapper/PerfilEstudianteMapper.java: toResponse(perfil).
+- mapper/UniversidadCarreraMapper.java: toResponse(relacion).
+- mapper/UniversidadMapper.java: toEntity(dto), aplicar(universidad, dto),
+  toResponse(universidad), toUbicacion(dto) (conversion de ubicacion).
+
+Modelos y tipos de transferencia
+-------------------------------
+Entidades JPA:
+- model/base/BaseEntity.java: campos compartidos id, fecha de creacion,
+  fecha de actualizacion y estado activo; onCreate() inicializa los campos
+  de creacion y onUpdate() actualiza la marca de modificacion.
+- model/entity/Carrera.java: carrera, area, nivel y habilidades.
+- model/entity/Estudiante.java: datos del estudiante, intereses, perfil.
+- model/entity/Habilidad.java: nombre y descripcion.
+- model/entity/Interes.java: relacion estudiante-carrera.
+- model/entity/InteresUniversidad.java: relacion estudiante-universidad.
+- model/entity/PerfilEstudiante.java: biografia, sitio web y estudiante.
+- model/entity/Universidad.java: nombre, ciudad, tipo y ubicacion.
+- model/entity/UniversidadCarrera.java: relacion universidad-carrera.
+- model/enums/NivelAcademico.java: valores PREGRADO, POSTGRADO, TECNICO
+  y TECNOLOGICO.
+
+Tipos embebibles y claves:
+- model/embeddable/InteresId.java: clave estudiante-carrera; igualdad y
+  hash para clave JPA.
+- model/embeddable/InteresUniversidadId.java: clave estudiante-universidad.
+- model/embeddable/UniversidadCarreraId.java: clave universidad-carrera.
+- model/embeddable/Ubicacion.java: direccion y codigo postal.
+
+DTO de entrada (request), con validaciones:
+- dto/request/CarreraRequestDTO.java: datos para crear/actualizar carrera.
+- dto/request/EstudianteRequestDTO.java: datos para estudiante.
+- dto/request/HabilidadRequestDTO.java: datos para habilidad.
+- dto/request/InteresRequestDTO.java: ids de estudiante y carrera.
+- dto/request/InteresUniversidadRequestDTO.java: ids de estudiante y
+  universidad.
+- dto/request/PerfilEstudianteRequestDTO.java: datos al crear perfil.
+- dto/request/PerfilEstudianteActualizacionRequestDTO.java: datos para
+  actualizar un perfil existente.
+- dto/request/UbicacionRequestDTO.java: direccion y codigo postal.
+- dto/request/UniversidadCarreraRequestDTO.java: ids de universidad y
+  carrera.
+- dto/request/UniversidadRequestDTO.java: datos de universidad y ubicacion.
+
+DTO de salida (response):
+- dto/response/CarreraResponseDTO.java: datos de carrera y habilidades.
+- dto/response/EstudianteResponseDTO.java: datos de estudiante.
+- dto/response/ErrorResponseDTO.java: estructura estandar de error.
+- dto/response/HabilidadResponseDTO.java: datos de habilidad.
+- dto/response/InteresResponseDTO.java: relacion de interes.
+- dto/response/InteresUniversidadResponseDTO.java: relacion de interes
+  universitario.
+- dto/response/PerfilEstudianteResponseDTO.java: datos de perfil.
+- dto/response/UbicacionResponseDTO.java: datos de ubicacion.
+- dto/response/UniversidadCarreraResponseDTO.java: datos de oferta
+  universidad-carrera.
+- dto/response/UniversidadResponseDTO.java: datos de universidad.
+
+Errores:
+- exception/RecursoNoEncontradoException.java: excepcion de recurso ausente.
+- exception/ReglaDeNegocioException.java: excepcion de regla incumplida.
+- exception/GlobalExceptionHandler.java:
+  manejarNoEncontrado(), manejarReglaDeNegocio(), manejarValidacion(),
+  manejarCuerpoIlegible(), manejarTipoIncorrecto(), manejarIntegridad() y
+  manejarErrorInesperado() traducen excepciones a respuestas HTTP.
+  construir(...): crea el cuerpo ErrorResponseDTO comun.
+
+Prueba disponible:
+- backend/src/test/java/com/cesde/sidcudb/SidcudbApplicationTests.java:
+  prueba de contexto de Spring Boot. Requiere una base de datos y variables
+  DB_URL, DB_USERNAME y DB_PASSWORD configuradas.
+
+======================================================================
+8. INVENTARIO DE ARCHIVOS DEL REPOSITORIO
+======================================================================
+
+Los archivos de codigo principales se describen con sus funciones en las
+secciones 6 y 7. Esta lista completa identifica ademas los manifiestos,
+estilos, recursos visuales y archivos de soporte.
+
+Raiz:
+- README.md: arquitectura, despliegue, variables y relacion frontend-API.
+- render.yaml: definicion de servicios en Render.
+- DOCUMENTACION_PROYECTO.txt: este documento.
+
+Backend:
+- backend/README.md: documentacion tecnica de la API y sus reglas.
+- backend/pom.xml: dependencias, plugins y configuracion Maven.
+- backend/mvnw y backend/mvnw.cmd: Maven Wrapper para Unix y Windows.
+- backend/.mvn/wrapper/maven-wrapper.properties: distribucion Maven.
+- backend/Dockerfile: construccion y ejecucion en contenedor.
+- backend/.dockerignore: archivos excluidos al construir la imagen.
+- backend/.env.example: plantilla local de variables de entorno.
+- backend/src/main/resources/application.properties: configuracion Spring.
+- backend/src/main/java/com/cesde/sidcudb/SidcudbApplication.java:
+  punto de entrada.
+- backend/src/main/java/com/cesde/sidcudb/config/CorsConfig.java:
+  configuracion CORS.
+- backend/src/main/java/com/cesde/sidcudb/config/DataSeederConfig.java:
+  carga opcional de datos iniciales.
+- backend/src/main/java/com/cesde/sidcudb/config/OpenApiConfig.java:
+  metadatos OpenAPI.
+- backend/src/main/java/com/cesde/sidcudb/controller/: ocho controladores
+  REST descritos en la seccion 7.
+- backend/src/main/java/com/cesde/sidcudb/dto/request/: diez DTO de entrada
+  descritos en la seccion 7.
+- backend/src/main/java/com/cesde/sidcudb/dto/response/: diez DTO de
+  salida descritos en la seccion 7.
+- backend/src/main/java/com/cesde/sidcudb/exception/: dos excepciones de
+  dominio y manejador global.
+- backend/src/main/java/com/cesde/sidcudb/mapper/: ocho mappers descritos
+  en la seccion 7.
+- backend/src/main/java/com/cesde/sidcudb/model/base/BaseEntity.java:
+  campos comunes de entidades.
+- backend/src/main/java/com/cesde/sidcudb/model/embeddable/: cuatro tipos
+  reutilizables y claves compuestas.
+- backend/src/main/java/com/cesde/sidcudb/model/entity/: ocho entidades
+  persistentes.
+- backend/src/main/java/com/cesde/sidcudb/model/enums/NivelAcademico.java:
+  niveles academicos permitidos.
+- backend/src/main/java/com/cesde/sidcudb/repository/: ocho interfaces
+  Spring Data JPA.
+- backend/src/main/java/com/cesde/sidcudb/service/: ocho servicios con
+  reglas de negocio.
+- backend/src/test/java/com/cesde/sidcudb/SidcudbApplicationTests.java:
+  prueba de inicio del contexto.
+
+Frontend, configuracion y dependencias:
+- frontend/README.md: instrucciones/descripciones originales del frontend;
+  verificar contra el codigo actual antes de considerar vigentes todas sus
+  afirmaciones.
+- frontend/package.json: scripts y dependencias npm.
+- frontend/package-lock.json: versiones resueltas de dependencias npm.
+- frontend/index.html: documento HTML base de Vite.
+- frontend/vite.config.js: configuracion del servidor y build Vite.
+- frontend/eslint.config.js: reglas de ESLint.
+- frontend/src/main.jsx: montaje de la aplicacion React.
+- frontend/src/App.jsx: layout de rutas.
+- frontend/src/index.css: estilos globales.
+
+Frontend, componentes comunes:
+- frontend/src/components/layout/navbar/Navbar.jsx y Navbar.css:
+  navegacion y estilos.
+- frontend/src/components/layout/footer/Footer.jsx y Footer.css:
+  pie de pagina y estilos.
+
+Frontend, datos y servicio:
+- frontend/src/data/admins.js: arreglo local utilizado por Login.
+- frontend/src/services/api.js: cliente GET del backend.
+
+Frontend, analitica:
+- frontend/src/pages/analiticaPage/Analitica.jsx: carga y agrega catalogos,
+  indicadores, respuestas y graficos.
+- frontend/src/pages/analiticaPage/Analitica.css: estilos del tablero.
+
+Frontend, carreras:
+- frontend/src/pages/carrerasPage/Carreras.jsx: listado, busqueda y carga
+  desde API.
+- frontend/src/pages/carrerasPage/Carreras.css: estilos de listado.
+- frontend/src/pages/informacionCarrerasPage/InformacionCarreras.jsx:
+  detalles dinamicos o estaticos.
+- frontend/src/pages/informacionCarrerasPage/InformacionCarreras.css:
+  estilos de detalle.
+- frontend/src/pages/informacionCarrerasPage/CarrerasData.js: catalogo
+  estatico usado por fichas y comparador.
+- frontend/src/pages/comparadorPage/Comparador.jsx: comparador local.
+- frontend/src/pages/comparadorPage/Comparador.css: estilos del comparador.
+
+Frontend, universidades:
+- frontend/src/pages/colaboradoresPage/Colaboradores.jsx: listado desde API.
+- frontend/src/pages/colaboradoresPage/Colaboradores.css: estilos.
+
+Frontend, paginas generales:
+- frontend/src/pages/homePage/Home.jsx y Home.css: inicio y estilos.
+- frontend/src/pages/homePage/Actualizaciones.jsx y Actualizaciones.css:
+  novedades estaticas y estilos.
+- frontend/src/pages/nosotrosPage/Nosotros.jsx y Nosotros.css:
+  informacion del proyecto y estilos.
+- frontend/src/pages/errorPage/Error.jsx y Error.css: pagina de error y
+  estilos.
+- frontend/src/pages/loginPage/Login.jsx y Login.css: inicio local y estilos.
+- frontend/src/pages/registroPage/Registro.jsx y Registro.css: formulario
+  visual y estilos.
+- frontend/src/router/routerApp.jsx: definicion de rutas.
+
+Frontend, autoevaluaciones:
+- frontend/src/pages/testPage/Test.jsx: indice y datos de cuestionarios.
+- frontend/src/pages/testPage/Test.css: estilos del indice.
+- frontend/src/pages/testPage/CuestionarioVocacional.jsx: cuestionario,
+  puntajes y almacenamiento local.
+- frontend/src/pages/testPage/TestCuestionario.css: estilos compartidos
+  de cuestionarios.
+- frontend/src/pages/testPage/TestIntereses.jsx: preguntas de intereses.
+- frontend/src/pages/testPage/TestHabilidades.jsx: preguntas de habilidades.
+- frontend/src/pages/testPage/TestPersonalidad.jsx: preguntas de personalidad.
+- frontend/src/pages/testPage/TestMotivaciones.jsx: preguntas de motivacion.
+- frontend/src/pages/testPage/TestAcademico.jsx: preguntas academicas.
+
+Recursos visuales del frontend:
+- frontend/public/favicon.svg: icono del sitio.
+- frontend/public/icons.svg: simbolos SVG compartidos.
+- frontend/src/assets/hero.png: recurso visual de portada.
+- frontend/src/assets/react.svg y frontend/src/assets/vite.svg: recursos
+  graficos de herramientas incluidos en el proyecto.
+- frontend/public/img/actitud.jpg: imagen sobre actitud.
+- frontend/public/img/andes.jpg: imagen identificada como Andes.
+- frontend/public/img/aptitud.jpg: imagen de aptitudes.
+- frontend/public/img/arte.jpg: imagen de arte.
+- frontend/public/img/autoestima.jpg: imagen de autoestima.
+- frontend/public/img/biblioteca.jpg: imagen de biblioteca.
+- frontend/public/img/cienciasb.jpg: imagen de ciencias.
+- frontend/public/img/civil.jpg: imagen asociada a ingenieria civil.
+- frontend/public/img/eafit.jpg: imagen de EAFIT.
+- frontend/public/img/economia.jpg: imagen de economia.
+- frontend/public/img/educacion.jpg: imagen de educacion.
+- frontend/public/img/fondogalaxia.jpg: fondo grafico.
+- frontend/public/img/ia.jpg: imagen relacionada con inteligencia artificial.
+- frontend/public/img/ingsis.jpg: imagen asociada a sistemas.
+- frontend/public/img/inscripcion.jpg: imagen de inscripcion.
+- frontend/public/img/javeriana.jpg: imagen de Javeriana.
+- frontend/public/img/logo1.png: recurso grafico de marca.
+- frontend/public/img/logo2.png: recurso grafico de marca.
+- frontend/public/img/mascota.png: ilustracion de mascota.
+- frontend/public/img/nacional.jpg: imagen de Universidad Nacional.
+- frontend/public/img/nubedetexto.png: recurso grafico decorativo.
+- frontend/public/img/pelaos.jpg: imagen de estudiantes.
+- frontend/public/img/psicologia.jpg: imagen asociada a psicologia.
+- frontend/public/img/sa#U00f1ud.jpg: archivo de imagen con nombre
+  codificado tal como aparece en el repositorio.
+- frontend/public/img/sidculogo.jpg: logo de SIDCU.
+- frontend/public/img/sidcumascota.jpg: ilustracion de mascota SIDCU.
+- frontend/public/img/sociales.jpg: imagen de ciencias sociales.
+- frontend/public/img/test.jpg: imagen relacionada con evaluaciones.
+- frontend/public/img/uvalle.jpg: imagen de Universidad del Valle.
+
+Los archivos CSS corresponden a estilos visuales de los componentes o
+paginas del mismo nombre; no contienen logica de negocio. Las imagenes
+son recursos estaticos servidos por el frontend.
+
+======================================================================
+9. EJECUCION LOCAL Y VERIFICACIONES
+======================================================================
+
+Requisitos:
+- JDK 17 o compatible.
+- PostgreSQL disponible y una base configurada.
+- Node.js y npm para el frontend.
+
+Backend en Windows PowerShell:
+1. Definir DB_URL, DB_USERNAME y DB_PASSWORD en el entorno.
+2. Desde backend ejecutar:
+   .\mvnw.cmd spring-boot:run
+3. Abrir http://localhost:8080/swagger-ui.html o
+   http://localhost:8080/actuator/health.
+
+Frontend:
+1. Desde frontend ejecutar npm install.
+2. Definir VITE_API_URL si el backend no esta en la URL predeterminada.
+3. Ejecutar npm run dev.
+4. Para verificar codigo, usar npm run lint y npm run build.
+
+El backend permite configurar SEED_ENABLED. La carga inicial solo se
+ejecuta si el seeder esta habilitado y los catalogos principales estan
+vacios. Verificar la configuracion antes de habilitarla en una base con
+datos existentes.
+
+La prueba Java de contexto necesita una base accesible y credenciales
+validas; no es una prueba aislada en memoria.
+
+======================================================================
+10. PRECAUCIONES Y ALCANCE DE LOS DATOS
+======================================================================
+
+- No guardar contrasenas, tokens ni URLs privadas de base de datos en el
+  repositorio ni en este archivo. Configurar secretos en Render o en el
+  entorno local.
+- Login y registro no son un mecanismo de seguridad ni una identidad
+  persistida.
+- Los cuestionarios son autoevaluaciones orientativas, no diagnósticos
+  profesionales.
+- Los graficos usan conteos del catalogo recibido y no deben presentarse
+  como estadisticas de matrículas, demanda o empleo.
+- Los datos que se muestran en produccion dependen de la API, de su base
+  PostgreSQL y de las variables de entorno configuradas.
+
+FIN DEL DOCUMENTO
