@@ -46,6 +46,11 @@ Si el backend cambia de URL, configura `VITE_API_URL` en el Static Site de Rende
 y vuelve a desplegarlo. El backend debe permitir el origen del frontend en
 `CORS_ALLOWED_ORIGINS`.
 
+La pestaña **Analítica** agrega los datos actuales de `/api/carreras`,
+`/api/universidades`, `/api/habilidades` y `/api/universidades-carreras` para
+mostrar la distribución del catálogo académico y las ofertas relacionadas.
+Estos gráficos no representan matrículas ni tendencias históricas.
+
 ## Desarrollo local
 
 ### Backend

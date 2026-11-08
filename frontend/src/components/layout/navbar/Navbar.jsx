@@ -13,6 +13,7 @@ const Navbar = ()=> {
                     <li><Link to="/colaboradores">COLABORADORES</Link></li>
                     <li><Link to="/carreras">CARRERAS</Link></li>
                     <li><Link to="/comparador">COMPARADOR</Link></li>
+                    <li><Link to="/analitica">ANALÍTICA</Link></li>
                     <li><Link to="/test">TESTS</Link></li>
                 </ul>
             </nav>

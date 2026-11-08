@@ -1,0 +1,250 @@
+.analitica-main {
+    width: min(1120px, calc(100% - 2rem));
+    margin: 2rem auto 3rem;
+}
+
+.analitica-intro,
+.analitica-hallazgos,
+.analitica-error,
+.analitica-grafico {
+    color: #28163c;
+    background: #fff;
+    border: 1px solid rgba(123, 80, 163, 0.16);
+    border-radius: 16px;
+    box-shadow: 0 8px 26px rgba(19, 0, 46, 0.12);
+}
+
+.analitica-intro {
+    padding: clamp(1.4rem, 4vw, 2.5rem);
+    text-align: center;
+}
+
+.analitica-eyebrow {
+    color: #7140a2;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.analitica-intro h1 {
+    margin: 0.4rem 0 0.7rem;
+    color: #31124d;
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+}
+
+.analitica-intro > p:not(.analitica-eyebrow) {
+    max-width: 760px;
+    margin: 0 auto 1.3rem;
+    line-height: 1.7;
+}
+
+.analitica-actualizar {
+    padding: 0.7rem 1.2rem;
+    border: 0;
+    border-radius: 999px;
+    background: #7132a9;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.analitica-actualizar:hover:not(:disabled) {
+    background: #56217f;
+    transform: translateY(-2px);
+}
+
+.analitica-actualizar:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.analitica-estado {
+    padding: 1.2rem;
+    color: #fff;
+    text-align: center;
+}
+
+.analitica-indicadores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.2rem 0;
+}
+
+.analitica-indicador {
+    display: flex;
+    min-height: 140px;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.25rem;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #fff, #f3eafd);
+    color: #28163c;
+    box-shadow: 0 6px 20px rgba(19, 0, 46, 0.12);
+}
+
+.analitica-indicador p {
+    margin: 0;
+    color: #654380;
+    font-weight: 600;
+}
+
+.analitica-indicador strong {
+    margin: 0.15rem 0;
+    color: #56217f;
+    font-size: 2.2rem;
+    line-height: 1.2;
+}
+
+.analitica-indicador span {
+    color: #685875;
+    font-size: 0.85rem;
+}
+
+.analitica-hallazgos {
+    margin-bottom: 1.2rem;
+    padding: 1.4rem clamp(1.2rem, 4vw, 2rem);
+}
+
+.analitica-hallazgos h2 {
+    margin-top: 0;
+    color: #31124d;
+}
+
+.analitica-hallazgos ul {
+    display: grid;
+    gap: 0.7rem;
+    padding-left: 1.25rem;
+    line-height: 1.55;
+}
+
+.analitica-hallazgos li::marker {
+    color: #853bb4;
+}
+
+.analitica-hallazgos > p,
+.analitica-nota {
+    color: #6d6077;
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.analitica-graficos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+}
+
+.analitica-grafico {
+    min-width: 0;
+    padding: 1.4rem;
+}
+
+.analitica-grafico h2 {
+    margin: 0;
+    color: #31124d;
+    font-size: 1.15rem;
+}
+
+.analitica-pregunta {
+    min-height: 3rem;
+    margin: 0.4rem 0 1.3rem;
+    color: #6d6077;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.analitica-barras {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.analitica-barra-encabezado {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.35rem;
+    color: #352542;
+    font-size: 0.88rem;
+}
+
+.analitica-barra-encabezado span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.analitica-barra-encabezado strong {
+    color: #56217f;
+    font-variant-numeric: tabular-nums;
+}
+
+.analitica-barra-fondo {
+    height: 0.72rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #eee8f3;
+}
+
+.analitica-barra-valor {
+    height: 100%;
+    min-width: 0.2rem;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #7132a9, #b578e4);
+    transition: width 0.35s ease;
+}
+
+.analitica-vacio {
+    color: #6d6077;
+}
+
+.analitica-error {
+    margin: 1.2rem 0;
+    padding: 1.4rem;
+    border-left: 5px solid #b43e5a;
+}
+
+.analitica-error h2 {
+    margin-top: 0;
+    color: #8e2844;
+}
+
+.analitica-nota {
+    margin: 1rem 0 0;
+    text-align: center;
+}
+
+@media (max-width: 800px) {
+    .analitica-indicadores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .analitica-graficos {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .analitica-indicadores {
+        gap: 0.65rem;
+    }
+
+    .analitica-indicador {
+        min-height: 120px;
+        padding: 1rem;
+    }
+
+    .analitica-indicador strong {
+        font-size: 1.8rem;
+    }
+
+    .analitica-grafico {
+        padding: 1.1rem;
+    }
+}

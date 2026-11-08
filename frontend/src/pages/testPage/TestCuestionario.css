@@ -74,58 +74,6 @@
   cursor: pointer;
 }
 
-.pregunta-test {
-  min-width: 0;
-  margin: 1.5rem 0;
-  padding: 0;
-  border: 0;
-}
-
-.pregunta-test legend {
-  color: #332342;
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.progreso-test progress {
-  margin-top: 0.75rem;
-}
-
-.opcion-test {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
-  line-height: 1.4;
-}
-
-.opcion-test input {
-  margin-top: 0.25rem;
-  accent-color: #532e7a;
-}
-
-.revision-pregunta {
-  margin: 1rem 0;
-  padding: 1rem;
-  border-radius: 8px;
-  background: #f8f5fc;
-  text-align: left;
-}
-
-.revision-pregunta h3 {
-  margin-top: 0;
-  color: #4b2f6a;
-}
-
-.revision-pregunta p {
-  line-height: 1.5;
-}
-
-.cuestionario .test-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-  transform: none;
-}
-
 .opcion-test:hover,
 .opcion-test:focus-visible,
 .boton-secundario:hover {
